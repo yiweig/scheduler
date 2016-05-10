@@ -6,6 +6,8 @@
 3. Follow [git-flow](http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/ "git-flow") practices. 
  - TL;DR: Respect the above rules. Any features should reside in `feature/feature-name` branches. Once you have finished your code changes, make a PR to `develop`. Once it is accepted, the feature branch can be deleted, if you would like).
 
+---
+
 ## Summary
 (Might need to clarify some of this) General idea: class scheduler that plans out your class over 4 years based on previous course information obtained through scraping/manual input. Since courses typically follow a somewhat predictable pattern, we can plan out future class schedules with a fair amount of certainty. Of course, faculty/curriculum changes, and other external events will cause drastic changes, but this is an inherent risk anyways. The benefit we provide is that we can automatically adjust the schedule once there is a change, with no other input from users other than indicating that a change is needed due to an unregistered class.
 
