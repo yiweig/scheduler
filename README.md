@@ -27,6 +27,7 @@ Some features:
 - User profiles, so users can save/load schedules, as well as compare themselves to students in other schools of the same field of study. We would probably need to create some kind of metric to score students as well (but we'll cross this bridge when we get there) 
 
 ## Tech (for the 1st iteration)
-Django  
-PostgreSQL (and possibly MongoDB)
+[virtualenv/virtualenvwrapper](http://docs.python-guide.org/en/latest/dev/virtualenvs/ "virtualenv/virtualenvwrapper") for dependency management
+Django for stack framework
+PostgreSQL (and possibly MongoDB) for data
 
