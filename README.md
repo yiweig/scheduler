@@ -28,6 +28,6 @@ Some features:
 
 ## Tech (for the 1st iteration)
 [virtualenv/virtualenvwrapper](http://docs.python-guide.org/en/latest/dev/virtualenvs/ "virtualenv/virtualenvwrapper") for dependency management  
-Django for stack framework
-PostgreSQL (and possibly MongoDB) for data
+Django for stack framework  
+PostgreSQL (and possibly MongoDB) for data  
 
