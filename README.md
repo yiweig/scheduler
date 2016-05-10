@@ -1,5 +1,3 @@
-# class-scheduler
-
 ## GROUND RULES
 1. DO NOT PUSH TO `master` directly.
 2. There are two branches which will always exist: `master` and `develop`. 
