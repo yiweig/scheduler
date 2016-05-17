@@ -11,7 +11,7 @@ class Department(models.Model):
 
 class Instructor(models.Model):
     # a department can have many instructors
-    department = models.ForeignKey(to=Department, on_delete=models.SET_NULL)
+    department = models.ForeignKey(to=Department, on_delete=models.SET_NULL, null=True)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
 
