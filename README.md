@@ -1,5 +1,5 @@
 ## GROUND RULES
-1. DO NOT PUSH TO `master` directly.
+1. DO NOT PUSH TO `master` or `develop` directly.
 2. There are two branches which will always exist: `master` and `develop`. 
  - `master` : the most up-to-date stable production build
  - `develop` : code changes which have been thoroughly vetted/tested that is about to be pushed (merged) to production.
