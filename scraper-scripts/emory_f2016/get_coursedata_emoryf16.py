@@ -4,6 +4,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 import time
 import csv
+import json
 
 def check_exists_by_class_name(browser, class_name):
 	try:
@@ -31,29 +32,28 @@ with open(filename, 'r') as myfile:
     	l_urls.append(row[0]) #every row is a list
 
 #for testing data
-test_urls = l_urls[:2]
-
+#test_urls = l_urls[:2]
+end = []
 browser = webdriver.Firefox()
 for url in l_urls:
 	section = {}
-	#section['url'] = url
 
 	#Class title 
 	browser.get(url)
-	#time.sleep(1)
 	selection = browser.find_element_by_id('class-section')
+	#this grabs all the text and just takes the first line, easiest
 	name = selection.text.split('\n', 1)[0]
-	#print(name)
 	section['name'] = name
+
 
 	#Class topic
 	if check_exists_by_class_name(browser, 'topic'):
 		topic = browser.find_element_by_class_name('topic')
 		course_topic = topic.text
 	else:
-		course_topic = 'No Topic'
-	#print(course_topic)
+		course_topic = 'none'
 	section['topic'] = course_topic.replace('Topic: ', '')
+
 
 	#find tabs
 	#tabs are 1-5 eg tabs-2
@@ -62,15 +62,19 @@ for url in l_urls:
 	#	3 - Textbooks, Articles, and Resources
 	#	4 - Grading
 	#	5 - Related Courses 
+	ref_tabnames = ['Schedule','Descriptions' ,'Textbooks, Articles, and Resources' ,'Grading' ,'Related Courses']
 	tabnames = []
 	tabs_name = selection.find_elements_by_class_name('ui-tabs-anchor')
 	for tab_name in tabs_name:
 		tabnames.append(tab_name.text)
-	#print(tabnames)
-	section['tabnames'] = tabnames
+	#section['tabnames'] = tabnames
 	number_of_tabs = len(tabnames)
-	#print(number_of_tabs)
+	for item in ref_tabnames:
+		if item not in tabnames:
+			section[str(item)] = 'none'
 
+
+	#Tab 1, has the schedule and most of the important stuff
 	tabs = selection.find_elements_by_class_name('ui-tabs-panel')
 	if check_exists_by_id(browser, 'tabs-1'):
 		tab1 = selection.find_element_by_id('tabs-1')
@@ -80,19 +84,17 @@ for url in l_urls:
 		credit = tab1_body.find_element_by_class_name('credit')
 		opus_number = tab1_body.find_element_by_class_name('opus-number')
 		
-		#print(ger.text)
-		#print(credit.text)
-		#print(opus_number.text)
 		section['ger'] = ger.text
 		section['credit'] = credit.text
 		section['opus_number'] = opus_number.text
 
 
+		#Can be multiple meeting places, times per day, etc.
+		#There are identical schedule elements, annoying
 		schedules = tab1_body.find_element_by_class_name('schedule')
-		#There are identical schedule elements, this is the child
-		schedules2 = schedules.find_elements_by_class_name('schedule')
+		schedules2 = schedules.find_elements_by_class_name('schedule') #child
+
 		schlist = []
-		count_sch = 0
 		for schedule in schedules2:
 			slot = {}
 			days = schedule.find_element_by_class_name('days')
@@ -103,30 +105,40 @@ for url in l_urls:
 			slot['time'] = time_schedule.text 
 			slot['instructor'] = instructor.text
 			schlist.append(slot)
-
-			#count_sch = count_sch + 1
-
-		#print(schlist)
+		
 		section['schedule'] = schlist
 
-		notes = tab1.find_element_by_class_name('notes')
-		section['notes'] = notes.text
 
-	#need to iterate over each tab, xpath seems like the move
-	#start with two because the first one is already there by default
+		#also grab the notes at the bottom
+		if check_exists_by_class_name(browser, 'notes'):
+			notes = tab1.find_element_by_class_name('notes')
+			section['notes'] = notes.text
+		else:
+			section['notes'] = 'none'
+
+
+
+	#need to iterate over the rest of the tabs
 	for i in range(2, number_of_tabs + 1):
 		tab_num = selection.find_element_by_xpath('/html/body/div[2]/div[5]/div/div/div[1]/ul/li[' + str(i) + ']')
 		tab_num.click()
-		#print(tabnames[i-1])
+
 		tab = selection.find_element_by_xpath('/html/body/div[2]/div[5]/div/div/div[1]/div[' + str(i) + ']')
-		#print(tab.text)
+		
+		#Justs grabs all of the text in other tabs, not structured consistently 
 		section[str(tabnames[i-1])] = tab.text
 
-	print(section)
-	
-
-	
-	
+	#print(section)
+	#add section to a list
+	end.append(section)
 
 browser.quit()
+
+
+
+with open('result_coursedata.json', 'w') as fp:
+    json.dump(end, fp)
+
+
+
 print('done')
