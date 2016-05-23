@@ -43,7 +43,7 @@ l_courses = []
 for abbreviation in l_abbrev:
 	#to subject via abbreviation
 	browser.get('http://atlas.college.emory.edu/schedules/index.php?select='+ abbreviation)
-	time.sleep(5) #wait to load
+	time.sleep(4) #wait to load
 	
 	courses = browser.find_element_by_xpath('/html/body/div[2]/div[5]/div/div')
 	for course in courses.find_elements_by_class_name('course'):
@@ -56,10 +56,18 @@ for abbreviation in l_abbrev:
 	browser.execute_script("window.history.go(-1)")
 	time.sleep(2) #need a better page_is_loaded()
 
+browser.quit()
 #---------------------------------------------------------------
 #--Every class link is now in a list
 #===============================================================
 
 
-
-browser.quit()
+#---------------------------------------------------------------
+#-- Now going to save all the links in a csv
+#---------------------------------------------------------------
+filename = school + '_' + term + '_' + year + '_' + 'courselinks.csv' 
+with open(filename, 'w') as myfile:
+    wr = csv.writer(myfile)
+    for course in l_courses:
+    	wr.writerow([course])
+#===============================================================
