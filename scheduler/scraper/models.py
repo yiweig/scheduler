@@ -48,3 +48,17 @@ class TimeSlot(models.Model):
 
     def __unicode__(self):
         return '%s', self.duration
+
+
+class EmoryAtlasCourse(models.Model):
+    related_courses = models.CharField(max_length=128)
+    grading = models.CharField(max_length=32)
+    opus_number = models.CharField(max_length=32)
+    name = models.CharField(max_length=64)
+    credit = models.IntegerField()
+    notes = models.CharField(max_length=128)
+    ger = models.CharField(max_length=32)
+    resources = models.TextField()
+    description = models.TextField()
+    topic = models.CharField(max_length=128)
+    schedule = models.CharField(max_length=512)
