@@ -62,3 +62,5 @@ with open(json_path) as json_file:
             topic=datum['topic'],
             schedule=datum['schedule']
         )
+        # un-comment the following line to actually save the models!
+        # emory_course.save()
